@@ -71,7 +71,8 @@ void new_note()
   if(choice < 1 || choice > 10)
   {
     std::cout<<"Zly numer pomieszczenia\n";
-    new_note();
+    wait();
+    return;
   }
   std::cout<<"Wprowadz tresc notatki: ";
   std::cin.ignore(); //ignore "\n" produced by cin
