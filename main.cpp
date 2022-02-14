@@ -97,8 +97,16 @@ void delete_note()
     std::cout<<"Numer notatki do usuniecia: ";
     int choice;
     std::cin>>choice;
-    notes.erase(notes.begin()+choice-1);
-    notes.erase(notes.begin()+choice);
+    if(choice>1 || choice>notes.size())
+    {
+      std::cout<<"Brak notatki o podanym numerze\n";
+      wait();
+    }
+    else
+    {
+      notes.erase(notes.begin()+choice-1);
+      notes.erase(notes.begin()+choice);
+    }
   }
   else
   {
