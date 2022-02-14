@@ -1,12 +1,21 @@
 #include <iostream>
 #include <windows.h>
 #include <vector>
+#include <string>
+
 std::vector <std::string> notes;
 
 void set_color(int color)
 {
   //idk how this works but gives fancy colors :D
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+void wait()
+{
+  //ignore "\n" produced by cin
+  std::cin.ignore();
+  getchar();
 }
 
 void menu()
@@ -41,10 +50,7 @@ void show_all()
   }
   else
     std::cout<<"\nNie masz zadnych notatek jeszcze\n";
-
-  //ignore "\n" produced by cin
-  std::cin.ignore();
-  getchar();
+  wait();
 }
 
 void new_note()
@@ -97,9 +103,7 @@ void delete_note()
   else
   {
     std::cout<<"\nNie masz zadnych notatek jeszcze\n";
-    //ignore "\n" produced by cin
-    std::cin.ignore();
-    getchar();
+    wait();
   }
 }
 
