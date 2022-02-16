@@ -45,6 +45,7 @@ void Notepad::new_note()
 	{
 	std::cout << "Wprowadz tresc notatki: ";
 	getline(std::cin, noteText);
+	if (noteText.find_first_not_of(' ') == std::string::npos) continue;
 	if (noteText.length() > 0) break;
 	}
 	Note note(rooms[choice - 1], noteText);
