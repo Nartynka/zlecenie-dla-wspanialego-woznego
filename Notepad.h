@@ -5,7 +5,6 @@
 class Notepad
 {
 private:
-	//colection of Notes
 	std::vector<Note> notes;
 public:
 	Notepad() {};

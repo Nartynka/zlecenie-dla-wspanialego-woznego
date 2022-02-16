@@ -13,7 +13,6 @@ inline int get_choice()
     std::string userChoice;
     getline(std::cin, userChoice);
     if (userChoice.size() > sizeof(int)) return 0;
-    if (std::isdigit(userChoice[0])) {return stoul(userChoice); }
+    if (std::isdigit(userChoice[0])) {return stoi(userChoice); }
     return 0;
 }
-

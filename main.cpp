@@ -26,8 +26,8 @@ int main()
     case 4:
       return 0;
     default:
-      std::cout<<"ERROR!!\n";
-      return 0;
+      std::cout<<"Error! Podaj poprawny numer\n";
+      system("pause");
     }
   }
 }

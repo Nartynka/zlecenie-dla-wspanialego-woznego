@@ -2,19 +2,12 @@
 #include "Notepad.h"
 #include "Helpers.h"
 
-//Notepad::~Notepad()
-//{
-//  for(Note note : notes)
-//    note.~note();
-//  notes.clear();
-//}
-
 void Notepad::show_all()
 {
 	set_color(6);
 	if (notes.size() != 0)
 	{
-		for (int i = 0; i < notes.size(); i++)
+		for (int i{}; i < notes.size(); i++)
 		{
 			std::cout << i + 1 << ".\n";
 			std::cout << "-------------------\n";
@@ -25,7 +18,7 @@ void Notepad::show_all()
 	}
 	else
 		std::cout << "\nNie masz zadnych notatek jeszcze\n";
-	getchar();
+	system("pause");
 }
 
 void Notepad::new_note()
@@ -35,7 +28,7 @@ void Notepad::new_note()
 	std::string noteText;
 	std::cout << "\nWbierz pomieszczenie\n";
 	std::cout << "---------------------\n";
-	for (int i = 0; i < 10; i++)
+	for (int i{}; i < 10; i++)
 	{
 		std::cout << i + 1 << ". " << rooms[i] << std::endl;
 	}
@@ -45,11 +38,15 @@ void Notepad::new_note()
 	if (choice < 1 || choice > 10)
 	{
 		std::cout << "Zly numer pomieszczenia\n";
-		getchar();
+		system("pause");
 		return;
 	}
+	while(true)
+	{
 	std::cout << "Wprowadz tresc notatki: ";
 	getline(std::cin, noteText);
+	if (noteText.length() > 0) break;
+	}
 	Note note(rooms[choice - 1], noteText);
 	notes.push_back(note);
 }
@@ -59,7 +56,7 @@ void Notepad::delete_note()
 	set_color(4);
 	if (notes.size() != 0)
 	{
-		for (int i = 0; i < notes.size(); i++)
+		for (int i{}; i < notes.size(); i++)
 		{
 			std::cout << i + 1 << ".\n";
 			std::cout << "-------------------\n";
@@ -72,7 +69,7 @@ void Notepad::delete_note()
 		if (choice<1 || choice>notes.size())
 		{
 			std::cout << "Brak notatki o podanym numerze\n";
-			getchar();
+			system("pause");
 			return;
 		}
 		else
@@ -83,6 +80,6 @@ void Notepad::delete_note()
 	else
 	{
 		std::cout << "\nNie masz zadnych notatek jeszcze\n";
-		getchar();
+		system("pause");
 	}
 }
