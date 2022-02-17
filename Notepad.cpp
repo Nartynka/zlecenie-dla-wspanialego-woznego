@@ -1,20 +1,25 @@
 #include <iostream>
 #include "Notepad.h"
 #include "Helpers.h"
+#include <iterator>
 
 void Notepad::show_all()
 {
 	set_color(6);
 	if (notes.size() != 0)
 	{
-		for (int i{}; i < notes.size(); i++)
+		for (int i = 0; i < rooms.size(); i++)
 		{
-			std::cout << i + 1 << ".\n";
-			std::cout << "-------------------\n";
-			std::cout << "Pomieszczenie: " << notes[i].getRoom() << std::endl;
-			std::cout << "Notatka: " << notes[i].getText() << std::endl;
+			std::cout << rooms[i] << ":\n";
+			int counter{};
+			for (Note& n : notes)
+			{
+				if (n.getRoom() == rooms[i]) {
+					std::cout << "\t> " << ++counter << ". " << n.getText() << "\n";
+				}
+			}
 		}
-		std::cout << "-------------------\n";
+		std::cout << "\n-------------------\n";
 	}
 	else
 		std::cout << "\nNie masz zadnych notatek jeszcze\n";
@@ -24,11 +29,10 @@ void Notepad::show_all()
 void Notepad::new_note()
 {
 	set_color(3);
-	std::string rooms[10]{ "Lobby", "Biuro 1", "Biuro 2", "Serwerownia 1", "Serwerownia 2", "Kuchnia", "Lazienka", "Sala Konferencyjna", "Magazyn", "Kanciapa woznego" };
 	std::string noteText;
 	std::cout << "\nWbierz pomieszczenie\n";
 	std::cout << "---------------------\n";
-	for (int i{}; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		std::cout << i + 1 << ". " << rooms[i] << std::endl;
 	}
@@ -41,12 +45,12 @@ void Notepad::new_note()
 		system("pause");
 		return;
 	}
-	while(true)
+	while (true)
 	{
-	std::cout << "Wprowadz tresc notatki: ";
-	getline(std::cin, noteText);
-	if (noteText.find_first_not_of(' ') == std::string::npos) continue;
-	if (noteText.length() > 0) break;
+		std::cout << "Wprowadz tresc notatki: ";
+		getline(std::cin, noteText);
+		if (noteText.find_first_not_of(' ') == std::string::npos) continue;
+		if (noteText.length() > 0) break;
 	}
 	Note note(rooms[choice - 1], noteText);
 	notes.push_back(note);
@@ -75,7 +79,7 @@ void Notepad::delete_note()
 		}
 		else
 		{
-			notes.erase(notes.begin() + choice-1);
+			notes.erase(notes.begin() + choice - 1);
 		}
 	}
 	else
