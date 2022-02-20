@@ -7,6 +7,8 @@ void display_menu();
 
 int main()
 {
+  //setlocale(LC_ALL, "pl_PL.UTF-8");
+  //SetConsoleOutputCP(65001);
   Notepad my_notes;
   while(true)
   {

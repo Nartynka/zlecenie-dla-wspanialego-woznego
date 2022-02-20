@@ -2,24 +2,42 @@
 #include "Notepad.h"
 #include "Helpers.h"
 #include <iterator>
+#include <fstream>
+
+void save_in_file(Note& note);
+
+Notepad::Notepad()
+{
+	std::fstream notesFile = open_file();
+	bool is_empty = notesFile.peek() == std::ifstream::traits_type::eof();
+	if (!is_empty) {
+		std::string line;
+		while (std::getline(notesFile, line))
+		{
+			std::string noteRoom = line.substr(0, line.find(","));
+			std::string noteText = line.substr(line.find(",") + 1, line.find("\n"));
+			Note note(noteRoom, noteText);
+			notes.push_back(note);
+		}
+	}
+	std::string aa = "aaaa";
+	notesFile >> aa;
+	notesFile.close();
+}
 
 void Notepad::show_all()
 {
 	set_color(6);
 	if (notes.size() != 0)
 	{
-		for (int i = 0; i < rooms.size(); i++)
+		int counter = 0;
+		for (Note& n : notes)
 		{
-			std::cout << rooms[i] << ":\n";
-			int counter{};
-			for (Note& n : notes)
-			{
-				if (n.getRoom() == rooms[i]) {
-					std::cout << "\t> " << ++counter << ". " << n.getText() << "\n";
-				}
-			}
+			std::cout << ++counter << ".\n";
+			std::cout << "Miejsce: " << n.getRoom();
+			std::cout << "\nNotatka: " << n.getText();
+			std::cout << "\n-------------------\n";
 		}
-		std::cout << "\n-------------------\n";
 	}
 	else
 		std::cout << "\nNie masz zadnych notatek jeszcze\n";
@@ -29,21 +47,16 @@ void Notepad::show_all()
 void Notepad::new_note()
 {
 	set_color(3);
+	std::string noteRoom;
 	std::string noteText;
-	std::cout << "\nWbierz pomieszczenie\n";
-	std::cout << "---------------------\n";
-	for (int i = 0; i < 10; i++)
+	while (true)
 	{
-		std::cout << i + 1 << ". " << rooms[i] << std::endl;
-	}
-	std::cout << "---------------------\n";
-	std::cout << "Odpowiedz: ";
-	int choice = get_choice();
-	if (choice < 1 || choice > 10)
-	{
-		std::cout << "Zly numer pomieszczenia\n";
-		system("pause");
-		return;
+		std::cout << "\nWpisz pomieszczenie\n";
+		std::cout << "---------------------\n";
+		std::cout << "Odpowiedz: ";
+		std::getline(std::cin, noteRoom);
+		if (noteRoom.find_first_not_of(' ') == std::string::npos) continue;
+		if (noteRoom.length() > 0) break;
 	}
 	while (true)
 	{
@@ -52,8 +65,19 @@ void Notepad::new_note()
 		if (noteText.find_first_not_of(' ') == std::string::npos) continue;
 		if (noteText.length() > 0) break;
 	}
-	Note note(rooms[choice - 1], noteText);
+	Note note(noteRoom, noteText);
+	save_in_file(note);
 	notes.push_back(note);
+}
+
+void save_in_file(Note& note)
+{
+	std::fstream file = open_file();
+	std::string room = note.getRoom();
+	std::string text = note.getText();
+	file << room << ",";
+	file << text << "\n";
+	file.close();
 }
 
 void Notepad::delete_note()
@@ -61,11 +85,12 @@ void Notepad::delete_note()
 	set_color(4);
 	if (notes.size() != 0)
 	{
-		for (int i{}; i < notes.size(); i++)
+		std::fstream file = open_file();
+		for (int i = 0; i < notes.size(); i++)
 		{
 			std::cout << i + 1 << ".\n";
 			std::cout << "-------------------\n";
-			std::cout << "Pomieszczenie: " << notes[i].getRoom() << std::endl;
+			std::cout << "Miejsce: " << notes[i].getRoom() << std::endl;
 			std::cout << "Notatka: " << notes[i].getText() << std::endl;
 		}
 		std::cout << "-------------------\n";
@@ -79,12 +104,35 @@ void Notepad::delete_note()
 		}
 		else
 		{
-			notes.erase(notes.begin() + choice - 1);
+			std::ofstream temp;
+			temp.open("temp.csv", std::ofstream::out);
+
+			char c;
+			int line_no = 1;
+			while (file.get(c))
+			{
+				if (c == '\n')
+					line_no++;
+				if (line_no != choice)
+					temp << c;
+			}
+			temp.close();
+			file.close();
+			remove("notes.csv");
+			rename("temp.csv", "notes.csv");
 		}
+		//int curLine = 0;
+		//std::string line;
+		//while (std::getline(file, line)) {
+		//	curLine++;
+		//	if (line.find(notes[choice-1].getText(), 0) != std::string::npos) 
+		//		line.replace(line.find(deleteline), deleteline.length(), "");
+		//}
+		notes.erase(notes.begin() + choice - 1);
 	}
 	else
 	{
-		std::cout << "\nNie masz zadnych notatek jeszcze\n";
-		system("pause");
+	std::cout << "\nNie masz zadnych notatek jeszcze\n";
+	system("pause");
 	}
 }

@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <string>
 #include <iostream>
+#include <fstream>
 inline void set_color(int color)
 {
 	//idk how this works but gives fancy colors :D
@@ -15,4 +16,14 @@ inline int get_choice()
 	if (userChoice.size() > sizeof(int) || userChoice[0] < 0) return 0;
 	if (std::isdigit(userChoice[0])) {return stoi(userChoice); }
 	return 0;
+}
+
+inline std::fstream open_file()
+{
+	std::fstream fout;
+	fout.open("notes.csv", std::ios::in | std::ios::out | std::ios::app);
+	if (fout.is_open()) return fout;
+
+	std::cout << "\nBlad podczas otwierania pliku\n";
+	exit(1);
 }
