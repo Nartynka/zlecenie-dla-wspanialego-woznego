@@ -18,12 +18,14 @@ inline int get_choice()
 	return 0;
 }
 
-inline std::fstream open_file()
+inline std::fstream open_file(std::string fileName = "notes.csv")
 {
 	std::fstream fout;
-	fout.open("notes.csv", std::ios::in | std::ios::out | std::ios::app);
+	fout.open(fileName, std::ios::in | std::ios::out | std::ios::app);
 	if (fout.is_open()) return fout;
 
-	std::cout << "\nBlad podczas otwierania pliku\n";
+	std::cout << "\nBlad podczas otwierania pliku "<<fileName<<std::endl;
+	fout.close();
+	system("pause");
 	exit(1);
 }
