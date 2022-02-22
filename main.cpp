@@ -23,7 +23,7 @@ int main()
 			my_notes.new_note();
 			break;
 		case 3:
-			my_notes.delete_note();
+			my_notes.display_delete();
 			break;
 		case 4:
 			my_notes.new_room();

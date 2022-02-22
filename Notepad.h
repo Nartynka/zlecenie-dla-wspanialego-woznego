@@ -13,7 +13,8 @@ public:
 	~Notepad() {};
 	void show_all();
 	void new_note();
-	void delete_note();
+	void display_delete();
+	void delete_note(int index);
 	void save_in_file(Note& note);
 	void save_in_file(std::string room);
 	void new_room();
