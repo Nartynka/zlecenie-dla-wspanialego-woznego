@@ -7,7 +7,7 @@ class Notepad
 private:
 	std::vector<Note> notes;
 	std::vector<std::string> rooms;
-	const std::string roomsFileName = "rooms.csv";
+	const std::string roomsFileName = "rooms.txt";
 public:
 	Notepad();
 	~Notepad() {};

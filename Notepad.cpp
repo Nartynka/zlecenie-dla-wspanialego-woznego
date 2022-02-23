@@ -48,7 +48,7 @@ void Notepad::show_all()
 				}
 			}
 		}
-		std::cout << "\n-------------------\n";
+		std::cout << "-------------------\n";
 	}
 	else
 		std::cout << "\nNie masz zadnych notatek jeszcze\n";
@@ -105,13 +105,6 @@ void Notepad::save_in_file(Note& note)
 	file.close();
 }
 
-void Notepad::save_in_file(std::string room)
-{
-	std::fstream file = open_file(roomsFileName);
-	file << room << "\n";
-	file.close();
-}
-
 void Notepad::display_delete()
 {
 	set_color(4);
@@ -133,7 +126,7 @@ void Notepad::display_delete()
 			system("pause");
 			return;
 		}
-		else delete_note(--choice);
+		else delete_note(choice - 1);
 	}
 	else
 	{
@@ -142,26 +135,13 @@ void Notepad::display_delete()
 	}
 }
 
-void Notepad::delete_note(int index) 
+void Notepad::delete_note(int index)
 {
-	std::fstream file = open_file();
-	std::ofstream temp;
-	temp.open("temp.csv", std::ofstream::out);
-
-	char c;
-	int line_no = 1;
-	while (file.get(c))
-	{
-		if (c == '\n')
-			line_no++;
-		if (line_no != (index+1) && c != '\n')
-			temp << c;
-	}
-	temp.close();
-	file.close();
-	int b = remove("notes.csv");
-	int a = rename("temp.csv", "notes.csv");
 	notes.erase(notes.begin() + index);
+	remove("notes.txt");
+
+	for (Note& n : notes)
+		save_in_file(notes[index]);
 }
 
 //maybe in future i would make a class for rooms
@@ -194,12 +174,19 @@ void Notepad::new_room()
 	save_in_file(newRoom);
 }
 
+void Notepad::save_in_file(std::string room)
+{
+	std::fstream file = open_file(roomsFileName);
+	file << room << "\n";
+	file.close();
+}
+
+
 void Notepad::delete_room()
 {
 	set_color(4);
 	if (rooms.size() != 0)
 	{
-		std::fstream file = open_file(roomsFileName);
 		std::cout << "-------------------\n";
 		for (int i = 0; i < rooms.size(); i++)
 		{
@@ -216,30 +203,21 @@ void Notepad::delete_room()
 		}
 		else
 		{
-			for (int i=0; i<notes.size(); i++)
+			bool have_notes = true;
+			while (have_notes && notes.size()>0)
 			{
-				if (notes[i].getRoom() == rooms[choice-1]) {
-					delete_note(i);
+				int i = 0;
+				for (; i < notes.size(); i++) {
+					if (notes[i].getRoom() == rooms[choice - 1])
+						delete_note(i);
+					else have_notes = false;
 				}
 			}
-			std::ofstream temp;
-			temp.open("tempRoom.csv", std::ofstream::out);
-
-			char c;
-			int line_no = 1;
-			while (file.get(c))
-			{
-				if (c == '\n')
-					line_no++;
-				if (line_no != choice && c!='\n')
-					temp << c;
-			}
-			temp.close();
-			file.close();
-			int b = remove("rooms.csv");
-			int a = rename("tempRoom.csv", "rooms.csv");
+			rooms.erase(rooms.begin() + choice - 1);
+			remove("rooms.txt");
+			for (std::string& room : rooms)
+				save_in_file(room);
 		}
-		rooms.erase(rooms.begin() + choice - 1);
 	}
 	else
 	{

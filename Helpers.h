@@ -18,7 +18,7 @@ inline int get_choice()
 	return 0;
 }
 
-inline std::fstream open_file(std::string fileName = "notes.csv")
+inline std::fstream open_file(std::string fileName = "notes.txt")
 {
 	std::fstream fout;
 	fout.open(fileName, std::ios::in | std::ios::out | std::ios::app);
