@@ -141,7 +141,7 @@ void Notepad::delete_note(int index)
 	remove("notes.txt");
 
 	for (Note& n : notes)
-		save_in_file(notes[index]);
+		save_in_file(n);
 }
 
 //maybe in future i would make a class for rooms
